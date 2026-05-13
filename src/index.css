@@ -1,0 +1,68 @@
+/* src/index.css */
+body {
+    background-color: #0d0d0f; /* Fondo súper oscuro para los laterales */
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #ffffff;
+    margin: 0;
+    transition: background-color 0.3s;
+}
+
+/* === DISEÑO DE CAJA (CONTAINER) === */
+.main-app-container {
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* === CABECERA PREMIUM (DEGRADADO NARANJA) === */
+.dashboard-header {
+    background: linear-gradient(135deg, #1a0f00 0%, #d84315 50%, #ff8f00 100%);
+    border-radius: 20px 20px 0 0; /* Solo redondeado arriba */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* === CUERPO DEL DASHBOARD === */
+.dashboard-body {
+    background-color: #16161a; /* Fondo gris oscuro del centro */
+    border-radius: 0 0 20px 20px; /* Solo redondeado abajo */
+    min-height: 80vh;
+}
+
+/* === COMPONENTES === */
+.card {
+    background-color: #1e1e24;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Estilo para las filas de la tabla (Blancas con texto oscuro) */
+.table {
+    --bs-table-bg: #ffffff;
+    --bs-table-color: #212529;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #1e1e24 !important;
+    color: #a0a0a0 !important;
+    border: none;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+}
+
+/* === COLOREO DE FILAS (Punto 13) === */
+.player-table__row--even-colored > td {
+    background-color: #e3f2fd !important;
+    color: #000 !important;
+}
+
+.player-table__row--odd-colored > td {
+    background-color: #fff3e0 !important;
+    color: #000 !important;
+}
+
+/* Animación suave para el buscador */
+.search-bar__input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+    border-color: #ffc107;
+}
