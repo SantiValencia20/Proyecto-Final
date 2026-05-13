@@ -55,16 +55,42 @@ function App() {
     }
   }, [debouncedSearch]);
 
+  // === PUNTO 15: Ordenamiento de Columnas (useState) ===
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'none' });
+
+  // Función para manejar el ciclo de ordenamiento: none -> asc -> desc -> none
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key) {
+      if (sortConfig.direction === 'asc') direction = 'desc';
+      else if (sortConfig.direction === 'desc') direction = 'none';
+    }
+    setSortConfig({ key, direction });
+  };
+
   // Filtramos a los jugadores usando el valor "debounced"
   const filteredPlayers = players.filter(player =>
     player.name.toLowerCase().includes(debouncedSearch.toLowerCase())
   );
 
+  // === PUNTO 15: Aplicar Algoritmo de Ordenamiento ===
+  const sortedPlayers = [...filteredPlayers].sort((a, b) => {
+    if (sortConfig.direction === 'none' || !sortConfig.key) return 0;
+    
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+
 
   // === CÁLCULOS MATEMÁTICOS DE PAGINACIÓN ===
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentPlayers = filteredPlayers.slice(indexOfFirstItem, indexOfLastItem);
+  const currentPlayers = sortedPlayers.slice(indexOfFirstItem, indexOfLastItem);
 
   // === PUNTO 16: Modo Oscuro (Persistencia al cargar) ===
   useEffect(() => {
@@ -154,6 +180,8 @@ function App() {
                 darkMode={darkMode} 
                 onViewPlayer={(jugador) => setSelectedPlayer(jugador)} 
                 onToggleFavorite={toggleFavorite}
+                sortConfig={sortConfig}
+                onSort={requestSort}
               />
             </div>
           </div>

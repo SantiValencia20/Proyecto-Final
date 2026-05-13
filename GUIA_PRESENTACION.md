@@ -18,6 +18,10 @@ Este documento es un resumen rápido para que sepas exactamente dónde está cad
 *   **Archivo:** `src/App.jsx` (Líneas 58-62) y `src/components/Pagination.jsx`
 *   **Qué decir:** "Calculamos qué jugadores mostrar según la página actual. Si el usuario busca algo nuevo, la app lo regresa automáticamente a la página 1 para evitar errores".
 
+### **Punto 15: Ordenamiento de Columnas (useState)**
+*   **Archivo:** `src/App.jsx` (Líneas 52-75) y `src/components/PlayerTable.jsx`
+*   **Qué decir:** "Implementamos un ciclo de ordenamiento (Asc, Desc, None) al hacer clic en los encabezados. Usamos el método `.sort()` de JavaScript para reordenar el array antes de mostrarlo".
+
 ### **Punto 16: Modo Oscuro (useState + useEffect + localStorage)**
 *   **Archivo:** `src/App.jsx` (Líneas 16, 66-73)
 *   **Qué decir:** "Gestionamos el tema con un booleano. Usamos `useEffect` para guardar la elección en el `localStorage`, de modo que si refrescas la página, se mantiene tu preferencia".
