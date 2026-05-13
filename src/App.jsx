@@ -12,15 +12,25 @@ import { Pagination } from './components/Pagination';
 import { Modal } from './components/Modal';
 
 function App() {
-  // Aquí guardaremos el estado de nuestra aplicación (si es modo oscuro o claro)
+  // === PUNTO 16: Modo Oscuro/Claro (useState + useEffect + localStorage) ===
   const [darkMode, setDarkMode] = useState(false);
 
   // cerebro de nuestra aplicacion :D
-  const [players, setPlayers] = useState(initialPlayers);
+  const [players, setPlayers] = useState(() => {
+    // === PUNTO 19: Sistema de Favoritos (Persistencia con localStorage) ===
+    const savedPlayers = localStorage.getItem('players_data');
+    return savedPlayers ? JSON.parse(savedPlayers) : initialPlayers;
+  });
+
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // === PUNTO 20: Historial de Búsquedas (useState + useEffect) ===
   const [history, setHistory] = useState([]);
+
+  // === PUNTO 18: Modal de Detalles (useState + Eventos) ===
   const [selectedPlayer, setSelectedPlayer] = useState(null);
+  
   // punto 14: Paginacion dinamica 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
@@ -36,16 +46,13 @@ function App() {
     return () => clearTimeout(timer);
   }, [searchTerm]);
 
-  // Cuando buscamos algo, regresar a la página 1 automáticamente y guardar en el historial (Punto 14)
+  // === PUNTO 20: Historial de Búsquedas (Lógica de actualización) ===
   useEffect(() => {
     setCurrentPage(1);
 
     if (debouncedSearch.trim() !== "" && !history.includes(debouncedSearch)) {
-      // Tomamos el historial anterior, agregamos la nueva búsqueda al inicio, 
-      // y cortamos a un máximo de 5 elementos para que no crezca al infinito
       setHistory(prevhistory => [debouncedSearch, ...prevhistory].slice(0, 5));
     }
-
   }, [debouncedSearch]);
 
   // Filtramos a los jugadores usando el valor "debounced"
@@ -57,34 +64,34 @@ function App() {
   // === CÁLCULOS MATEMÁTICOS DE PAGINACIÓN ===
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-
-  // Estos son los jugadores cortados que realmente se verán en la tabla
   const currentPlayers = filteredPlayers.slice(indexOfFirstItem, indexOfLastItem);
 
-  // 1. Al cargar la página, recuperar la preferencia guardada
+  // === PUNTO 16: Modo Oscuro (Persistencia al cargar) ===
   useEffect(() => {
     const saved = localStorage.getItem('darkMode');
     if (saved) setDarkMode(JSON.parse(saved));
   }, []);
 
-  // 2. Cada vez que cambie darkMode, guardarlo en el navegador
   useEffect(() => {
     localStorage.setItem('darkMode', JSON.stringify(darkMode));
   }, [darkMode]);
+
+  // === PUNTO 19: Sistema de Favoritos (Guardar cambios en localStorage) ===
+  useEffect(() => {
+    localStorage.setItem('players_data', JSON.stringify(players));
+  }, [players]);
 
   // Función para alternar el modo oscuro
   const toggleTheme = () => {
     setDarkMode(!darkMode);
   };
 
-  // NUEVO: Función para marcar/desmarcar favoritos
+  // === PUNTO 19: Sistema de Favoritos (Lógica de toggle) ===
   const toggleFavorite = (playerId) => {
     setPlayers(prevPlayers => 
       prevPlayers.map(player => {
         if (player.id === playerId) {
           const updatedPlayer = { ...player, isFavorite: !player.isFavorite };
-          
-          // Truco: Si el modal está abierto con este mismo jugador, también actualizamos el modal
           if (selectedPlayer && selectedPlayer.id === playerId) {
             setSelectedPlayer(updatedPlayer);
           }

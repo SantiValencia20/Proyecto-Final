@@ -1,3 +1,4 @@
+// === PUNTO 18: Modal de Detalles (useState + Eventos) ===
 export function Modal({ player, onClose, onToggleFavorite }) {
   // Si player es null, no dibujamos nada en pantalla
   if (!player) return null;
